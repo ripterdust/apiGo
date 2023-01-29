@@ -1,34 +1,37 @@
 package router
 
 import (
-	"github.com/gorilla/mux"
+	"net/http"
+
 	"prueba.com/core"
 	"prueba.com/users"
 )
 
 type Router struct {
-	routes []func(*mux.Router) core.Core
+	routes []func(*http.ServeMux) core.Core
+	Mux    *http.ServeMux
 }
 
-func New() {
+func New(muxRouter *http.ServeMux) Router {
 
-	routes := []func(*mux.Router) core.Core{
+	routes := []func(*http.ServeMux) core.Core{
 		users.UsersRoute,
 	}
 
 	router := Router{
 		routes: routes,
+		Mux:    muxRouter,
 	}
 
 	router.setRoutes()
 
+	return router
 }
 
 func (router *Router) setRoutes() {
-	Mux := mux.NewRouter()
 
 	for _, route := range router.routes {
-		route(Mux)
+		route(router.Mux)
 	}
 
 }

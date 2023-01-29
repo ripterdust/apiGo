@@ -2,17 +2,15 @@ package core
 
 import (
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 type Core struct {
 	edpoint string
-	Mux     *mux.Router
+	Mux     *http.ServeMux
 }
 
-func New(endpoint string, setup setupRoute, Mux *mux.Router) Core {
-	core := Core{edpoint: endpoint}
+func New(endpoint string, setup SetupRoute, Mux *http.ServeMux) Core {
+	core := Core{edpoint: endpoint, Mux: Mux}
 
 	core.setup(setup)
 
@@ -20,13 +18,12 @@ func New(endpoint string, setup setupRoute, Mux *mux.Router) Core {
 
 }
 
-func (core *Core) setup(setup setupRoute) {
+func (core *Core) setup(setup SetupRoute) {
 
 	endpoint := "/" + core.edpoint
+	handler := handlers{}
 
-	if setup.find {
-		core.Mux.HandleFunc(endpoint, func(response http.ResponseWriter, response *http.Response) {
-
-		})
+	if setup.Find {
+		core.Mux.HandleFunc(endpoint, handler.find)
 	}
 }

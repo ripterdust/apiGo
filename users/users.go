@@ -1,15 +1,16 @@
 package users
 
 import (
-	"github.com/gorilla/mux"
+	"net/http"
+
 	"prueba.com/core"
 )
 
-func UsersRoute(Mux *mux.Router) core.Core {
+func UsersRoute(Mux *http.ServeMux) core.Core {
 
-	routeSetup := core.NewSetup(true, true, true, true)
+	routeSetup := core.SetupRoute{Find: true}
 
-	route := core.New("usuario", routeSetup, Mux)
+	route := core.New("users", routeSetup, Mux)
 
 	return route
 
